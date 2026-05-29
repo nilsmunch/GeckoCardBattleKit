@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using LizardKit.DebugButton;
 using LizardKit.Scaffolding;
 using Newtonsoft.Json.Linq;
-using UnityEngine;
 
 namespace LizardCards.Network
 {
@@ -22,9 +21,10 @@ namespace LizardCards.Network
         private string _currentPostCall;
         
         [Button]
-        public void Test()
+        public async Task Test()
         {
-            FetchJsonAsync("/ping", s => Log(s.ToString()));
+            var ping = await FetchJsonAsync("/ping");
+            Log(ping.ToString());
         }
 
         protected virtual string FillUriDetails(string uri)
@@ -42,23 +42,24 @@ namespace LizardCards.Network
             _client.DefaultRequestHeaders.Add("access_token", accessToken);
         }
 
-        // ReSharper disable Unity.PerformanceAnalysis
-        public async void FetchJsonAsync(string uri, Action<JObject> onSuccess, Action<Exception> onError = null, CancellationToken ct = default)
+        public async Task<JObject> FetchJsonAsync(string uri, CancellationToken ct = default)
         {
-            if (uri == _currentFetchCall) return;
+            if (uri == _currentFetchCall) return null;
             _currentFetchCall = uri;
-            var url = GetBaseUrl() + uri;
-
+            var url = GetBaseUrl() + FillUriDetails(uri);
             try
             {
                 var obj = await FetchJson(url, ct);
-                onSuccess?.Invoke(obj);
-                _currentFetchCall = null;
+                return obj;
             }
             catch (ApiException ex)
             {
-                LogError($"{url} Status: {ex.StatusCode}");
-                LogError($"Message: {ex.Message}");
+                LogError($"{url} Status: {ex.StatusCode} Message: {ex.Message}");
+                return null;
+            }
+            finally
+            {
+                _currentFetchCall = null;
             }
         }
 
@@ -90,24 +91,30 @@ namespace LizardCards.Network
         
         
 
-        // ReSharper disable Unity.PerformanceAnalysis
-        public async void PostJsonAsync(string uri, HttpContent posting,Action<JObject> onSuccess, Action<Exception> onError = null, CancellationToken ct = default)
+        public async Task<JObject> PostJsonAsync(
+            string uri, HttpContent posting, CancellationToken ct = default)
         {
-            if (string.IsNullOrEmpty(uri) || uri == _currentPostCall) return;
+            if (string.IsNullOrEmpty(uri)) throw new ArgumentException("URI cannot be null or empty.", nameof(uri));
+
+            if (uri == _currentPostCall) throw new InvalidOperationException($"Already posting to '{uri}'");
+
             _currentPostCall = uri;
+
             var url = GetBaseUrl() + FillUriDetails(uri);
+
             try
             {
-                var obj = await PostJson(url,
-                    posting, ct);
-                onSuccess?.Invoke(obj);
+                return await PostJson(url, posting, ct);
             }
             catch (ApiException ex)
             {
-                LogError($"{url} Status: {ex.StatusCode}");
-                LogError($"Message: {ex.Message}");
+                LogError($"{url} Status: {ex.StatusCode} Message: {ex.Message}");
+                throw;
             }
-            _currentPostCall = null;
+            finally
+            {
+                _currentPostCall = null;
+            }
         }
         
         private async Task<JObject> PostJson(string uri, HttpContent posting, CancellationToken ct = default) 
