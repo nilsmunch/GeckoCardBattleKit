@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using LizardCards.SessionManagement;
 using Newtonsoft.Json.Linq;
+using UnityEngine;
 
 namespace LizardCards.Network
 {
@@ -29,6 +30,7 @@ namespace LizardCards.Network
             }
             catch (Exception ex)
             {
+                Debug.LogError(ex);
                 onError?.Invoke(ex);
             }
         }
