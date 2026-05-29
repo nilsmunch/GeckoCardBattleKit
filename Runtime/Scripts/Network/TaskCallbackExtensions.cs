@@ -23,16 +23,20 @@ namespace LizardCards.Network
             Action<JObject> onSuccess,
             Action<Exception> onError = null)
         {
+            JObject result;
+
             try
             {
-                var result = await task;
-                onSuccess?.Invoke(result);
+                result = await task;
             }
             catch (Exception ex)
             {
                 Debug.LogError(ex);
                 onError?.Invoke(ex);
+                return;
             }
+
+            onSuccess?.Invoke(result);
         }
     }
 }
