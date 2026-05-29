@@ -5,7 +5,9 @@ namespace LizardCards.GamePhases
     public interface IGamePhaseHandler
     {
         public void HandleGamePhase(JObject gameData, JObject playerData, JObject phaseData);
-
-        public abstract string ResponsibleForPhase();
+        
+        public void OnChangeState(string state);
+        
+        public string ResponsibleForPhase();
     }
 }
