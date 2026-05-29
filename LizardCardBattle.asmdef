@@ -1,0 +1,16 @@
+{
+    "name": "LizardCardBattle",
+    "rootNamespace": "LizardCards",
+    "references": [
+        "GUID:2ce762f54d85d124ebc8bad63063b526"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
