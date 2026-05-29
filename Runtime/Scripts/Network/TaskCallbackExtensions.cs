@@ -1,11 +1,21 @@
 using System;
 using System.Threading.Tasks;
+using LizardCards.SessionManagement;
 using Newtonsoft.Json.Linq;
 
 namespace LizardCards.Network
 {
     public static class TaskCallbackExtensions
     {
+        public static void UpdateGame<TController>(this Task<JObject> task)
+            where TController : CoreSessionController<TController>
+        {
+            task.Then(response =>
+            {
+                CoreSessionController<TController>.Instance.UpdateFromFeed(response);
+            });
+        }
+        
         // ReSharper disable Unity.PerformanceAnalysis
         public static async void Then(
             this Task<JObject> task,
