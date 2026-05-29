@@ -2,7 +2,6 @@ using LizardCards.Network;
 using LizardCards.SessionManagement;
 using LizardKit.Scaffolding;
 using Newtonsoft.Json.Linq;
-using SunfallRaiders.Network;
 
 namespace LizardCards.GamePhases
 {

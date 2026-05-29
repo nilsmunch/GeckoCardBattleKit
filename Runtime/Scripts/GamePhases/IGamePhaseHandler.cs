@@ -1,6 +1,6 @@
 using Newtonsoft.Json.Linq;
 
-namespace SunfallRaiders.Network
+namespace LizardCards.GamePhases
 {
     public interface IGamePhaseHandler
     {
