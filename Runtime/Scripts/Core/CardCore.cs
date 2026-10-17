@@ -6,7 +6,7 @@ namespace LizardCards
     {
         public static bool Initialized( )
         {
-            return (Network == null);
+            return (Network != null);
         }
 
         public static void Register(INetworkController controller)
