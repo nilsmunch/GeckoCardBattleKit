@@ -5,16 +5,17 @@ using Newtonsoft.Json.Linq;
 
 namespace LizardCards.GamePhases
 {
-    public abstract class CorePhaseController<T, TGame> : BaseManager<T>, IGamePhaseHandler
-        where T : CorePhaseController<T, TGame>
+    public abstract class CorePhaseController<T, TGame> : VirtualSingleton<T>, IGamePhaseHandler
+        where T : CorePhaseController<T, TGame>, new()
         where TGame : CoreSessionController<TGame>
     {
         protected JObject PhaseData;
         public JObject PlayerData;
-
-        protected override void Awake()
+        
+        
+        public void Initialize()
         {
-            base.Awake();
+            Prepare();
             PhaseHandlerCollection.Register(this);
         }
 
