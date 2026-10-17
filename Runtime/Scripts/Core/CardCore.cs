@@ -4,16 +4,21 @@ namespace LizardCards
 {
     public static class CardCore
     {
-        private static INetworkController _networkController;
+        public static bool Initialized( )
+        {
+            return (Network == null);
+        }
 
         public static void Register(INetworkController controller)
         {
-            _networkController = controller;
+            Network = controller;
         }
 
-        public static INetworkController Network()
+        public static INetworkController Network { get; private set; }
+
+        public static void Initialize()
         {
-            return _networkController;
+            Network.Initialize();
         }
     }
 }

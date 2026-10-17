@@ -42,7 +42,7 @@ namespace LizardCards.GamePhases
         public virtual void ProcessUrl(string url)
         {
             //Log(url);
-            CardCore.Network().PostJsonAsync(url,
+            CardCore.Network.PostJsonAsync(url,
                     null)
                 .Then(response =>
                     {

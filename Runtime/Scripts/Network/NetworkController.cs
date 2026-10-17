@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace LizardCards.Network
 {
-    public abstract class NetworkController<T> : SingletonController<T>
+    public abstract class NetworkController<T> : VirtualSingleton<T>
         where T : NetworkController<T>,
         INetworkController, new()
     {
@@ -76,6 +76,7 @@ namespace LizardCards.Network
 
         private async Task<JObject> FetchJson(string uri, CancellationToken ct = default) 
         {
+            Log(uri);
             var response = await _client.GetAsync(uri, ct);
             var body = await response.Content.ReadAsStringAsync();
             
