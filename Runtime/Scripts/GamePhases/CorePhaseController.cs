@@ -41,8 +41,8 @@ namespace LizardCards.GamePhases
         
         public virtual void ProcessUrl(string url)
         {
-            Log(url);
-            NetworkController.Instance.PostJsonAsync(url,
+            //Log(url);
+            CardCore.Network().PostJsonAsync(url,
                     null)
                 .Then(response =>
                     {

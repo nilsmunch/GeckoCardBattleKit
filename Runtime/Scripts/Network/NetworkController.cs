@@ -3,12 +3,13 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using LizardKit.DebugButton;
-using LizardKit.Scaffolding;
 using Newtonsoft.Json.Linq;
 
 namespace LizardCards.Network
 {
-    public abstract class NetworkController : BaseManager<NetworkController>
+    public abstract class NetworkController<T> : SingletonController<T>
+        where T : NetworkController<T>,
+        INetworkController, new()
     {
         private readonly HttpClient _client = new();
         
@@ -32,9 +33,9 @@ namespace LizardCards.Network
             return uri;
         }
 
-        protected override void Awake()
+        protected override void Prepare()
         {
-            base.Awake();
+            base.Prepare();
 #if !UNITY_EDITOR 
             serviceOutlet = ServiceOutlet.PRODUCTION;
 #endif
@@ -88,7 +89,6 @@ namespace LizardCards.Network
             
             return string.IsNullOrEmpty(body) ? null : JObject.Parse(body);
         }
-        
         
 
         public async Task<JObject> PostJsonAsync(
