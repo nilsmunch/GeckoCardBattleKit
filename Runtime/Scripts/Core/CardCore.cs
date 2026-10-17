@@ -4,6 +4,8 @@ namespace LizardCards
 {
     public static class CardCore
     {
+        public static INetworkController Network { get; private set; }
+        
         public static bool Initialized( )
         {
             return (Network != null);
@@ -13,8 +15,6 @@ namespace LizardCards
         {
             Network = controller;
         }
-
-        public static INetworkController Network { get; private set; }
 
         public static void Initialize()
         {
