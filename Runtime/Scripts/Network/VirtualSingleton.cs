@@ -2,8 +2,7 @@ using UnityEngine;
 
 namespace LizardCards.Network
 {
-    public class VirtualSingleton<T>
-        where T : VirtualSingleton<T>, new()
+    public class VirtualSingleton<T> where T : VirtualSingleton<T>, new()
     {
         private static T _sInstance;
 
@@ -28,7 +27,7 @@ namespace LizardCards.Network
 
         protected virtual void Prepare()
         {
-            
+            if (_sInstance == null) _sInstance = (T)this;
         }
         
         
